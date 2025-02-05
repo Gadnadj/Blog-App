@@ -1,5 +1,5 @@
-import { BiSearch } from 'react-icons/bi';
-import { Link } from 'react-router-dom';
+import { BiSearch } from "react-icons/bi";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
     const user = false;

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 const Login = () => {
     return (
@@ -12,7 +12,7 @@ const Login = () => {
                 <div className="flex justify-center items-center gap-1">
                     <p>New here?</p>
                     <p className='text-blue-700 hover:text-blue-500'>
-                        <Link to={'/register'}>
+                        <Link to={"/register"}>
                             Register
                         </Link>
                     </p>
