@@ -6,8 +6,8 @@ import image1 from "../assets/image1.jpg";
 
 const PostDetails = () => {
     return (
-        <div>
-            <div className="px-8 md:px-[200px] mt-8">
+        <div className="md:px-[200px]">
+            <div className="px-8  mt-8">
                 <div className="flex justify-between items-center">
                     <h1 className="text-2xl font-bold text-black md:text-3xl">
                         10 Uses of Artificial Intelligence in Day to Day Life
@@ -91,8 +91,16 @@ const PostDetails = () => {
                         </p>
                     </div>
                 </div>
-
             </div>
+
+            <div>
+                {/* Write a comment */}
+                <div className="w-full flex flex-col mt-4 md:flex-row gap-3 px-8">
+                    <input className="md:w-[80%] outline-none px-4 mt-4 md:mt-0 border rounded-lg py-2" type="textarea" placeholder="Write a comment" />
+                    <button className="bg-black text-white px-4 py-2 md:w-[20%] md:mt-0 rounded-full">Add Comment</button>
+                </div>
+            </div>
+
         </div>
     );
 };
