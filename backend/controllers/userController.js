@@ -61,10 +61,7 @@ export const loginUser = async (req, res) => {
 
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '3d' })
         const { password: userPassword, ...info } = user._doc
-        res.cookie('token', token).status(200).json(info)
-
-        return res.status(200).json(user)
-
+        return res.cookie('token', token).status(200).json(info)
 
     } catch (error) {
         return res.status(500).json({ message: error.message })
