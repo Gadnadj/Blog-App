@@ -1,61 +1,80 @@
-import { useState } from "react";
-import { BiSearch } from "react-icons/bi";
-import { FaBars } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { BsSearch } from "react-icons/bs";
+import { FaBars } from "react-icons/fa";
+import { useState } from "react";
 import MenuMobile from "./MenuMobile";
 
+
+
 const Navbar = () => {
+
     const [menu, setMenu] = useState(false);
-    const user = false;
+    const user = true;
+
 
     const showMenu = () => {
-        setMenu(true);
+        setMenu(!menu);
     };
 
+
     return (
-        <div className="flex flex-wrap items-center justify-between w-full max-w-screen-xl mx-auto px-4 py-3 md:px-10">
-            {/* Logo */}
-            <h1 className="text-lg font-extrabold whitespace-nowrap md:text-xl">
-                <Link to="/">Blog Market</Link>
+        <div className="flex items-center justify-between px-6 md:px-[200px] py-4">
+
+            <h1 className="text-lg md:text-xl font-extrabold">
+                <Link to="/">
+                    Blog Market
+                </Link>
             </h1>
 
-            {/* Barre de recherche */}
-            <div className="flex items-center gap-2 border rounded-full px-3 py-1 max-w-[150px] md:max-w-[250px] flex-1">
-                <BiSearch className="text-gray-500" />
-                <input
-                    className="w-full outline-none text-sm bg-transparent placeholder-gray-400"
-                    type="text"
-                    placeholder="Search a post"
-                />
-            </div>
-
-            {/* Liens utilisateur */}
-            <div className="hidden md:flex items-center justify-center gap-2 md:gap-4">
-                {user ? (
-                    <>
-                        <Link className="text-sm md:text-lg" to="/write">Write</Link>
-                        <Link className="text-sm md:text-lg" to="/profile">Profile</Link>
-                    </>
-                ) : (
-                    <>
-                        <Link className="text-sm md:text-lg" to="/login">Login</Link>
-                        <Link className="text-sm md:text-lg" to="/register">Register</Link>
-                    </>
-                )}
-            </div>
-
-            <div
-                onClick={showMenu}
-                className="text-lg relative">
-                <p>
-                    <FaBars className="cursor-pointer"/>
+            <div className="flex justify-center items-center space-x-0">
+                <p className="cursor-pointer">
+                    <BsSearch />
                 </p>
-                {
-                    menu && <MenuMobile setMenu={setMenu} />
-                }
+
+                <input className="outline-none px-3 " placeholder="Search a post" type="text" />
             </div>
+
+            <div className="hidden md:flex items-center justify-center space-x-2 md:space-x-4">
+                {
+                    user ?
+                        <h3>
+                            <Link to="/write">
+                                Write
+                            </Link>
+                        </h3>
+                        :
+                        <h3>
+                            <Link to="/login">
+                                Login
+                            </Link>
+                        </h3>}
+
+                {
+                    user
+                        ?
+                        <div onClick={showMenu}>
+                            <p className="cursor-pointer relative">
+                                <FaBars />
+                            </p>
+                            {menu && <MenuMobile />}
+                        </div>
+                        :
+                        <h3>
+                            <Link to="/register">
+                                Register
+                            </Link>
+                        </h3>}
+
+            </div>
+            <div onClick={showMenu} className="md:hidden text-lg">
+                <p className="cursor-pointer relative">
+                    <FaBars />
+                </p>
+                {menu && <MenuMobile />}
+            </div>
+
         </div>
     );
 };
 
-export default Navbar;
+export default Navbar; 
