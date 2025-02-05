@@ -26,12 +26,12 @@ const Navbar = () => {
                 </Link>
             </h1>
 
-            <div className="flex justify-center items-center space-x-0">
-                <p className="cursor-pointer">
-                    <BsSearch />
+            <div className="flex justify-center items-center space-x-0 relative">
+                <p className="cursor-pointer ">
+                    <BsSearch className="absolute right-1 top-1" size={20} />
                 </p>
 
-                <input className="outline-none px-3 " placeholder="Search a post" type="text" />
+                <input className="outline-none px-6 border-1 rounded-full " placeholder="Search a post" type="text" />
             </div>
 
             <div className="hidden md:flex items-center justify-center space-x-2 md:space-x-4">
