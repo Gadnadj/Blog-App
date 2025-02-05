@@ -2,6 +2,7 @@ import express, { json } from 'express'
 import mongoose from 'mongoose'
 import dotenv from 'dotenv'
 import userRouter from './routes/users.route.js'
+import postRouter from './routes/posts.route.js'
 
 
 dotenv.config()
@@ -11,6 +12,7 @@ const app = express()
 //middleware
 app.use(express.json())
 app.use('/api/user', userRouter)
+app.use('/api/post', postRouter)
 
 const connectDB = async () => {
     try {
