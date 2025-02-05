@@ -5,7 +5,7 @@ export const createComment = async (req, res) => {
     try {
         const { comment, author, post_id, user_id } = req.body
         if (!comment) {
-            res.status(401).json({ message: 'Add a comment' })
+            return res.status(401).json({ message: 'Add a comment' })
         }
         const newComment = new Comment({ comment, author, post_id, user_id })
         const savedComment = await newComment.save()
