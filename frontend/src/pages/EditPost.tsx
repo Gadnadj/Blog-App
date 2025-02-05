@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ImCross } from "react-icons/im";
 
 
-const CreatePost = () => {
+const EditPost = () => {
     const [cat, setCat] = useState("");
     const [cats, setCats] = useState<string[]>([]);
 
@@ -20,7 +20,7 @@ const CreatePost = () => {
         <div>
             <div className="px-6 md:px-[200px] mt-8">
                 <h1 className="font-bold md:text-2xl text-xl">
-                    Create a post
+                    Update a post
                 </h1>
 
                 <form className="w-full flex flex-col gap-4 md:gap-8 mt-4">
@@ -73,7 +73,7 @@ const CreatePost = () => {
                     />
 
                     <button className="bg-black text-white w-full rounded-lg md:w-[40%] px-4 py-2 mx-auto text-lg md:text-xl">
-                        Create
+                        Update
                     </button>
 
                 </form>
@@ -82,4 +82,4 @@ const CreatePost = () => {
     );
 };
 
-export default CreatePost;
+export default EditPost;

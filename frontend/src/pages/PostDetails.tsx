@@ -96,7 +96,7 @@ const PostDetails = () => {
             <div>
                 {/* Write a comment */}
                 <div className="w-full flex flex-col mt-4 md:flex-row gap-3 px-8">
-                    <input className="md:w-[80%] outline-none px-4 mt-4 md:mt-0 border rounded-lg py-2" type="textarea" placeholder="Write a comment" />
+                    <textarea rows={3} cols={6} className="md:w-[80%] outline-none px-4 mt-4 md:mt-0 border rounded-lg py-2" placeholder="Write a comment" />
                     <button className="bg-black text-white px-4 py-2 md:w-[20%] md:mt-0 rounded-full">Add Comment</button>
                 </div>
             </div>
