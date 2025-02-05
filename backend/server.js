@@ -1,11 +1,16 @@
-import express from 'express'
+import express, { json } from 'express'
 import mongoose from 'mongoose'
 import dotenv from 'dotenv'
+import userRouter from './routes/users.route.js'
 
-//middleware
+
 dotenv.config()
 
 const app = express()
+
+//middleware
+app.use(express.json())
+app.use('/api/user', userRouter)
 
 const connectDB = async () => {
     try {
@@ -17,9 +22,7 @@ const connectDB = async () => {
     }
 }
 
-
-
-app.listen(process.env.PORT | 3000, () => {
+app.listen(process.env.PORT || 3000, () => {
     connectDB()
     console.log(`🚀 Server Listening on port ${process.env.PORT}`)
 })
