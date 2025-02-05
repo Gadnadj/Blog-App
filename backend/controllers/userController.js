@@ -1,5 +1,7 @@
 import express from 'express'
 import User from '../models/User.js'
+import Post from '../models/Post.js'
+import Comment from '../models/Comment.js'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
@@ -35,11 +37,6 @@ export const registerUser = async (req, res) => {
     }
 }
 
-
-
-
-
-
 //login user
 export const loginUser = async (req, res) => {
 
@@ -69,14 +66,64 @@ export const loginUser = async (req, res) => {
 
 }
 
-
-
-
 //logout user
 export const logoutUser = async (req, res) => {
     try {
-        res.clearCookie('token', { sameSite: 'none', secure: true }).status(200).json({ message: 'User logged Out' })
+        return res.clearCookie('token', { sameSite: 'none', secure: true }).status(200).json({ message: 'User logged Out' })
     } catch (error) {
-        res.status(500).json({ message: error.message })
+        return res.status(500).json({ message: error.message })
+    }
+}
+
+//Update User
+export const updateUser = async (req, res) => {
+
+    try {
+        if (req.body.password) {
+            const { password } = req.body
+            const salt = await bcrypt.genSalt(10)
+            const hashedPassword = await bcrypt.hash(password, salt)
+            req.body.password = hashedPassword
+        }
+        const id = req.params.id
+        const user = await User.findByIdAndUpdate(id, { $set: req.body }, { new: true })
+        const { password: userPassword, ...info } = user._doc
+        return res.status(200).json(info)
+
+
+    } catch (error) {
+        return res.status(500).json({ message: error.message })
+
+    }
+}
+
+//Delete User
+export const deleteUser = async (req, res) => {
+    try {
+        const id = req.params.id
+        await User.findByIdAndDelete(id)
+        await Post.deleteMany({ user_id: id })
+        await Comment.deleteMany({ user_id: id })
+        return res.status(200).json({ message: 'User has been deleted' })
+    } catch (error) {
+        return res.status(500).json({ message: error.message })
+    }
+}
+
+//Get user
+export const getUser = async (req, res) => {
+    try {
+        const id = req.params.id
+        const user = await User.findById(id)
+        if (!user) {
+            return res.status(401).json({ message: 'No user' })
+        }
+        const { password, ...info } = user._doc
+        return res.status(200).json(info)
+
+
+    } catch (error) {
+        return res.status(500).json({ message: error.message })
+
     }
 }
