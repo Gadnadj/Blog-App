@@ -49,7 +49,12 @@ export const deletePost = async (req, res) => {
 //Get all post
 export const getPost = async (req, res) => {
     try {
-        const posts = await Post.find()
+        const query = req.query
+        console.log(query)
+        const searchFilter = {
+            title: { $regex: query.search, $options: "i" }
+        }
+        const posts = await Post.find(query.search ? searchFilter : null)
         return res.status(200).json(posts)
     } catch (error) {
         return res.status(500).json({ message: error.message })

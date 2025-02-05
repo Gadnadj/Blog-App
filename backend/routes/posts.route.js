@@ -8,6 +8,7 @@ router.put('/:id', updatePost)
 router.delete('/:id', deletePost)
 router.get('/:id', getUserPost)
 router.get('/', getPost)
+// router.get('/search/:prompt', searchPost)
 
 
 
