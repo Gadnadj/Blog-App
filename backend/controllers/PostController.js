@@ -50,7 +50,6 @@ export const deletePost = async (req, res) => {
 export const getPost = async (req, res) => {
     try {
         const query = req.query
-        console.log(query)
         const searchFilter = {
             title: { $regex: query.search, $options: "i" }
         }
