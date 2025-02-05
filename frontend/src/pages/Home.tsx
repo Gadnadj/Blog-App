@@ -1,10 +1,17 @@
-import React from 'react';
+import HomePosts from '../components/HomePosts';
 
-type Props = {}
 
-const Home = (props: Props) => {
+const Home = () => {
     return (
-        <div>Home</div>
+        <>
+            <div className='px-8 md:px-[200px]'>
+                <HomePosts />
+                <HomePosts />
+                <HomePosts />
+                <HomePosts />
+                <HomePosts />
+            </div>
+        </>
     );
 };
 

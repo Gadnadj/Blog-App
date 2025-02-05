@@ -1,45 +1,41 @@
 import { BiSearch } from 'react-icons/bi';
 import { Link } from 'react-router-dom';
 
-
 const Navbar = () => {
+    const user = false;
 
-    const user = true;
     return (
-        <div className='flex items-center justify-between px-6 md:px-[200px] py-4'>
-            <h1 className='flex text-lg md:text-xl font-extrabold whitespace-nowrap'>
-                <Link
-                    to={'/'}>
-                    Blog Market
-                </Link>
+        <div className="flex flex-wrap items-center justify-between w-full max-w-screen-lg mx-auto px-4 py-3 md:px-10">
+            {/* Logo */}
+            <h1 className="text-lg font-extrabold whitespace-nowrap md:text-xl">
+                <Link to="/">Blog Market</Link>
             </h1>
 
-            <div className='flex justify-center items-center space-x-0'>
-                <p>
-                    <BiSearch />
-                </p>
-
+            {/* Barre de recherche */}
+            <div className="flex items-center gap-2 border rounded-full px-3 py-1 max-w-[120px] md:max-w-[250px] flex-1">
+                <BiSearch className="text-gray-500" />
                 <input
-                    className='outline-none px-3'
+                    className="w-full outline-none text-sm bg-transparent placeholder-gray-400"
                     type="text"
-                    placeholder='Search a post' />
+                    placeholder="Search a post"
+                />
             </div>
 
-            {
-                user ?
-                    <div className='flex items-center justify-center space-x-2 md:space-x-4'>
-                        <h3><Link to={'/write'}>Write</Link></h3>
-                        <h3><Link to={'/profile'}>Profile</Link></h3>
-                    </div>
-
-                    :
-                    <div className='flex items-center justify-center space-x-2 md:space-x-4'>
-                        <h3><Link to={'/login'}>Login</Link></h3>
-                        <h3><Link to={'/register'}>Register</Link></h3>
-                    </div>
-            }
-
-        </div >
+            {/* Liens utilisateur */}
+            <div className="flex items-center gap-3 md:gap-6">
+                {user ? (
+                    <>
+                        <Link className="text-sm md:text-lg" to="/write">Write</Link>
+                        <Link className="text-sm md:text-lg" to="/profile">Profile</Link>
+                    </>
+                ) : (
+                    <>
+                        <Link className="text-sm md:text-lg" to="/login">Login</Link>
+                        <Link className="text-sm md:text-lg" to="/register">Register</Link>
+                    </>
+                )}
+            </div>
+        </div>
     );
 };
 
