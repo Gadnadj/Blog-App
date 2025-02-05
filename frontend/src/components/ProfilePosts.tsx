@@ -1,6 +1,6 @@
 import image1 from "../assets/image1.jpg";
 
-const HomePosts = () => {
+const ProfilePosts = () => {
     return (
         <div className="w-full flex-col md:flex md:flex-row mt-8 space-x-2">
             {/* left */}
@@ -27,4 +27,4 @@ const HomePosts = () => {
     );
 };
 
-export default HomePosts;
+export default ProfilePosts;

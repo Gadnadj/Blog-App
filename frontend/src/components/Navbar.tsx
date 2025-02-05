@@ -5,7 +5,7 @@ const Navbar = () => {
     const user = false;
 
     return (
-        <div className="flex flex-wrap items-center justify-between w-full max-w-screen-lg mx-auto px-4 py-3 md:px-10">
+        <div className="flex flex-wrap items-center justify-between w-full max-w-screen-xl mx-auto px-4 py-3 md:px-10">
             {/* Logo */}
             <h1 className="text-lg font-extrabold whitespace-nowrap md:text-xl">
                 <Link to="/">Blog Market</Link>
