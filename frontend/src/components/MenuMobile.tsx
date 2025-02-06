@@ -2,12 +2,23 @@ import { useContext } from "react";
 import { IoMdClose } from "react-icons/io";
 import { Link } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
+import axios from "axios";
+import { URL } from "../url";
 
 const MenuMobile = () => {
 
 
-    const { user } = useContext(UserContext);
+    const { setUser, user } = useContext(UserContext);
 
+    const handleLogout = async () => {
+        try {
+            await axios.get(URL + "/api/user/logout", { withCredentials: true });
+            setUser(null);
+
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     return (
         <div className="bg-gray-400 w-[200px] flex flex-col items-start absolute top-7 right-0 gap-4 rounded-md p-4">
@@ -37,7 +48,9 @@ const MenuMobile = () => {
                             </Link>
                         </h3>
 
-                        <h3 className="text-white text-lg hover:text-black cursor-pointer">
+                        <h3
+                            onClick={handleLogout}
+                            className="text-white text-lg hover:text-black cursor-pointer">
                             <Link to="/logout">
                                 Logout
                             </Link>

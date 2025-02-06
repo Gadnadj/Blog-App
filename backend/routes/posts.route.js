@@ -5,10 +5,10 @@ import { verifyToken } from '../middleware/verifyToken.js'
 const router = express.Router()
 
 router.post('/write', verifyToken, createPost)
+router.get('/', getPost)
 router.put('/:id', verifyToken, updatePost)
 router.delete('/:id', verifyToken, deletePost)
 router.get('/:id', getUserPost)
-router.get('/', getPost)
 // router.get('/search/:prompt', searchPost)
 
 

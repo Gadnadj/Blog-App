@@ -6,7 +6,6 @@ const EditPost = () => {
     const [cat, setCat] = useState("");
     const [cats, setCats] = useState<string[]>([]);
 
-    console.log(cats);
     const addCategory = () => {
         setCats([...cats, cat]);
         setCat("");

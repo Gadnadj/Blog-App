@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useEffect, useState } from "react";
 import { UserInterface, UserContextType } from "../types";
 import axios from "axios";
@@ -13,19 +14,18 @@ export const UserContextProvider = ({ children }: props) => {
     const [user, setUser] = useState<UserInterface | null>(null);
 
     useEffect(() => {
+        const getUser = async () => {
+            try {
+                const res = await axios.get(URL + "/api/user/refetch", { withCredentials: true });
+                setUser(res.data);
+            } catch (error) {
+                console.log(error);
+                setUser(null);
+            }
+        };
+
         getUser();
     }, []);
-
-    const getUser = async () => {
-        try {
-            const res = await axios.get(URL + "/api/user/refetch", { withCredentials: true });
-            setUser(res.data);
-            console.log(res.data);
-        } catch (error) {
-            console.log(error);
-            setUser(null);
-        }
-    };
 
     return (
         <UserContext.Provider value={{ user, setUser }}>
