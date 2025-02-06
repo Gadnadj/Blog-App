@@ -1,15 +1,16 @@
 import { Link } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
 import { FaBars } from "react-icons/fa";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import MenuMobile from "./MenuMobile";
+import { UserContext } from "../context/UserContext";
 
 
 
 const Navbar = () => {
 
     const [menu, setMenu] = useState(false);
-    const user = false;
+    const { user } = useContext(UserContext);
 
 
     const showMenu = () => {

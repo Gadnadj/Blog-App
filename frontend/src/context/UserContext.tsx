@@ -5,7 +5,7 @@ type props = {
     children: React.ReactNode
 }
 
-export const UserContext = createContext<UserContextType | undefined>(undefined);
+export const UserContext = createContext<UserContextType>({ user: null, setUser: () => { } });
 
 export const UserContextProvider = ({ children }: props) => {
     const [user, setUser] = useState<UserInterface | null>(null);

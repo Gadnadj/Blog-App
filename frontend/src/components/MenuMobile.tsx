@@ -1,10 +1,12 @@
+import { useContext } from "react";
 import { IoMdClose } from "react-icons/io";
 import { Link } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
 
 const MenuMobile = () => {
 
 
-    const user = true;
+    const { user } = useContext(UserContext);
 
 
     return (
