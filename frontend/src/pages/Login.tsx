@@ -1,14 +1,49 @@
-import { Link } from "react-router-dom";
+import axios from "axios";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { URL } from "../url";
 
 const Login = () => {
+
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+            const res = await axios.post(URL + "/api/user/login", { email, password });
+            console.log(res);
+            navigate("/");
+
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     return (
         <div className="w-full flex justify-center items-center h-[66.6vh]">
             <div className="flex flex-col justify-center items-center gap-4 w-[80%] md:w-[25%]">
                 <h1 className="text-xl font-bold">Log in to your account</h1>
-                <input className="w-full px-4 py-2 border-2 border-black outline-0" type="email" placeholder="Enter your email" />
-                <input className="w-full px-4 py-2 border-2 border-black outline-0" type="password" placeholder="Enter your password" />
+                <input
+                    className="w-full px-4 py-2 border-2 border-black outline-0"
+                    type="email"
+                    placeholder="Enter your email"
+                    onChange={(e) => setEmail(e.target.value)}
+                    value={email}
+                />
 
-                <button className="bg-black w-full px-4 py-2 text-lg rounded-full font-bold text-white hover:bg-gray-500 hover:text-black">Login</button>
+                <input
+                    className="w-full px-4 py-2 border-2 border-black outline-0"
+                    type="password"
+                    placeholder="Enter your password"
+                    onChange={(e) => setPassword(e.target.value)}
+                    value={password}
+                />
+
+                <button
+                    onClick={(e) => handleSubmit(e)}
+                    className="bg-black w-full px-4 py-2 text-lg rounded-full font-bold text-white hover:bg-gray-500 hover:text-black">Login</button>
                 <div className="flex justify-center items-center gap-1">
                     <p>New here?</p>
                     <p className='text-blue-700 hover:text-blue-500'>

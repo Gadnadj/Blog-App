@@ -1,6 +1,6 @@
 import axios from "axios";
-import { ReactElement, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { URL } from "../url";
 
 const Register = () => {
@@ -8,19 +8,22 @@ const Register = () => {
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
+    const [error, setError] = useState<boolean>(false);
+    const navigate = useNavigate();
 
 
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const res = await axios.post(URL + "/api/user/register", { username, email, password });
+            await axios.post(URL + "/api/user/register", { username, email, password });
             setUsername("");
             setEmail("");
             setPassword("");
-            console.log(res);
+            setError(false);
+            navigate("/login");
         } catch (error) {
+            setError(true);
             console.log(error);
         }
     };
@@ -58,6 +61,12 @@ const Register = () => {
                     className="bg-black w-full px-4 py-2 text-lg rounded-full font-bold text-white hover:bg-gray-500 hover:text-black">
                     Register
                 </button>
+
+                {
+                    error && (
+                        <h3 className="text-red-500 text-sm">Something went wrong</h3>
+                    )
+                }
 
                 <div className="flex justify-center items-center gap-1">
                     <p>Already have an account?</p>
