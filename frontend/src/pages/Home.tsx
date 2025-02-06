@@ -1,21 +1,26 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import HomePosts from "../components/HomePosts";
 import axios from "axios";
 import { URL } from "../url";
 import { PostInterface } from "../types";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import Loader from "../components/Loader";
+import { UserContext } from "../context/UserContext";
 
 
 const Home = () => {
     const [posts, setPosts] = useState<PostInterface[]>([]);
     const { search } = useLocation();
-    console.log(search);
+    const [loader, setLoader] = useState(false);
+    const { user } = useContext(UserContext);
 
     useEffect(() => {
+        setLoader(true);
         const fetchPosts = async () => {
             try {
                 const res = await axios.get(URL + "/api/post/" + search);
                 setPosts(res.data);
+                setLoader(false);
             } catch (error) {
                 console.log(error);
             }
@@ -26,11 +31,25 @@ const Home = () => {
 
     return (
         <>
-            <div className='px-8 md:px-[200px] min-h-[80vh]'>
+            <div className='px-8 xl:px-[200px] min-h-[80vh]'>
                 {
-                    posts.map((post) => (
-                        <HomePosts post={post} key={post._id} />
-                    ))
+                    loader ? (
+                        <div className="h-[40vh] flex justify-center items-center">
+                            <Loader />
+                        </div>
+                    ) : (
+                        posts.length === 0 ? (
+                            <div className="flex items-center justify-center h-[80vh]">
+                                <p className="text-xl font-semibold">No result</p>
+                            </div>
+                        ) : (
+                            posts.map((post) => (
+                                <Link key={post._id} to={user ? `/posts/post/${post._id}` : "login"}>
+                                    <HomePosts post={post} />
+                                </Link>
+                            ))
+                        )
+                    )
                 }
             </div>
         </>

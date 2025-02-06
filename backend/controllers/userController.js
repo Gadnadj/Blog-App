@@ -56,7 +56,7 @@ export const loginUser = async (req, res) => {
             return res.status(401).json({ message: 'Wrong password' })
         }
 
-        const token = jwt.sign({ id: user._id, username: user.username, email: user.email }, process.env.JWT_SECRET, { expiresIn: '3d' })
+        const token = jwt.sign({ _id: user._id, username: user.username, email: user.email }, process.env.JWT_SECRET, { expiresIn: '3d' })
         const { password: userPassword, ...info } = user._doc
         return res.cookie('token', token).status(200).json(info)
 
@@ -131,7 +131,6 @@ export const getUser = async (req, res) => {
 //REFETCH USER
 export const refetchUser = async (req, res) => {
     const token = req.cookies.token;
-    console.log('je suis la')
 
     if (!token) {
         return res.status(401).json({ message: 'Token is missing' });

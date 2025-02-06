@@ -30,7 +30,7 @@ const Register = () => {
 
     return (
         <div className="w-full flex justify-center items-center h-[66.6vh]">
-            <div className="flex flex-col justify-center items-center gap-4 w-[80%] md:w-[25%]">
+            <div className="flex flex-col justify-center items-center gap-4 w-[80%] xl:w-[25%]">
                 <h1 className="text-xl font-bold">Create an account</h1>
                 <input
                     className="w-full px-4 py-2 border-2 border-black outline-0"

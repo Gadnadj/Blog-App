@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
 import { FaBars } from "react-icons/fa";
 import { useContext, useState } from "react";
@@ -12,39 +12,43 @@ const Navbar = () => {
     const [prompt, setPrompt] = useState("");
     const [menu, setMenu] = useState(false);
     const { user } = useContext(UserContext);
+    const path = useLocation().pathname;
     const navigate = useNavigate();
 
-    console.log(prompt);
     const showMenu = () => {
         setMenu(!menu);
     };
 
 
     return (
-        <div className="flex items-center justify-between px-6 md:px-[200px] py-4">
+        <div className="flex items-center justify-between px-6 xl:px-[200px] py-4">
 
-            <h1 className="text-lg md:text-xl font-extrabold">
+            <h1 className="text-lg xl:text-xl font-extrabold">
                 <Link to="/">
                     Blog Market
                 </Link>
             </h1>
 
-            <div className="flex justify-center items-center space-x-0 relative">
-                <p
-                    onClick={() => navigate(prompt ? `?search=${prompt}` : "/")}
-                    className="cursor-pointer ">
-                    <BsSearch className="absolute right-1 top-1" size={20} />
-                </p>
+            {path === "/" && (
+                <div className="flex justify-center items-center space-x-0 relative">
 
-                <input
-                    onChange={(e) => setPrompt(e.target.value)}
-                    value={prompt}
-                    className="outline-none px-6 border-1 rounded-full"
-                    placeholder="Search a post"
-                    type="text" />
-            </div>
+                    <p
+                        onClick={() => navigate(prompt ? `?search=${prompt}` : "/")}
+                        className="cursor-pointer ">
+                        <BsSearch className="absolute right-1 top-1" size={20} />
+                    </p>
 
-            <div className="hidden md:flex items-center justify-center space-x-2 md:space-x-4">
+
+                    <input
+                        onChange={(e) => setPrompt(e.target.value)}
+                        value={prompt}
+                        className="outline-none px-6 border-1 rounded-full"
+                        placeholder="Search a post"
+                        type="text" />
+                </div>
+            )}
+
+            <div className="hidden xl:flex items-center justify-center space-x-2 xl:space-x-4">
                 {
                     user ?
                         <h3>
@@ -76,7 +80,7 @@ const Navbar = () => {
                         </h3>}
 
             </div>
-            <div onClick={showMenu} className="md:hidden text-lg">
+            <div onClick={showMenu} className="xl:hidden text-lg">
                 <p className="cursor-pointer relative">
                     <FaBars />
                 </p>

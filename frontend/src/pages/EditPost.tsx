@@ -17,12 +17,12 @@ const EditPost = () => {
 
     return (
         <div>
-            <div className="px-6 md:px-[200px] mt-8">
-                <h1 className="font-bold md:text-2xl text-xl">
+            <div className="px-6 xl:px-[200px] mt-8">
+                <h1 className="font-bold xl:text-2xl text-xl">
                     Update a post
                 </h1>
 
-                <form className="w-full flex flex-col gap-4 md:gap-8 mt-4">
+                <form className="w-full flex flex-col gap-4 xl:gap-8 mt-4">
 
                     {/* add post title */}
                     <input className="px-4 py-2 outline-none border-2 border-gray-300 rounded-lg" type="text" placeholder="Enter post title" />
@@ -35,7 +35,7 @@ const EditPost = () => {
 
                     {/* add categories */}
                     <div className="flex flex-col">
-                        <div className="flex items-center gap-4 md:gap-8">
+                        <div className="flex items-center gap-4 xl:gap-8">
                             <input
                                 onChange={(e) => setCat(e.target.value)}
                                 value={cat}
@@ -53,7 +53,7 @@ const EditPost = () => {
 
                             {
                                 cats.map((item, index) => (
-                                    <div key={index} className="flex justify-center items-center gap-2 mr-4 bg-gray-200 px-2 py-1 rounded-lg mt-2 w-[30%] md:w-[10%]">
+                                    <div key={index} className="flex justify-center items-center gap-2 mr-4 bg-gray-200 px-2 py-1 rounded-lg mt-2 w-[30%] xl:w-[10%]">
                                         <p>{item}</p>
                                         <p onClick={() => deleteCategory(index)} className="text-white bg-black rounded-full p-1 text-sm"> <ImCross className="cursor-pointer" /> </p>
                                     </div>
@@ -71,7 +71,7 @@ const EditPost = () => {
                         placeholder="Enter post description"
                     />
 
-                    <button className="bg-black text-white w-full rounded-lg md:w-[40%] px-4 py-2 mx-auto text-lg md:text-xl">
+                    <button className="bg-black text-white w-full rounded-lg xl:w-[40%] px-4 py-2 mx-auto text-lg xl:text-xl">
                         Update
                     </button>
 

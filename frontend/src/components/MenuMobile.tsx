@@ -51,7 +51,7 @@ const MenuMobile = () => {
                         <h3
                             onClick={handleLogout}
                             className="text-white text-lg hover:text-black cursor-pointer">
-                            <Link to="/logout">
+                            <Link to="/login">
                                 Logout
                             </Link>
                         </h3>
