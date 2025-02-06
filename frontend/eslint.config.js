@@ -26,8 +26,6 @@ export default {
     semi: ["error", "always"],
     // Guillemets simples
     quotes: ["error", "double", { avoidEscape: true }],
-    // Pas d'espace inutile avant les parenthèses
-    "space-before-function-paren": ["error", "never"],
     // Pas de trailing commas
     "comma-dangle": ["error", "never"],
     // Utilisation stricte des triples égales (===)

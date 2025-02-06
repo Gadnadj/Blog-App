@@ -29,7 +29,8 @@ export const registerUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, salt)
         const newUser = new User({ username, email, password: hashedPassword })
         const savedUser = await newUser.save()
-        return res.status(200).json(savedUser)
+        const { password: userPassword, ...info } = savedUser._doc
+        return res.status(200).json(info)
 
     } catch (error) {
         return res.status(500).json({ message: error.message })
