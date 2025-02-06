@@ -127,3 +127,21 @@ export const getUser = async (req, res) => {
 
     }
 }
+
+//REFETCH USER
+export const refetchUser = async (req, res) => {
+    const token = req.cookies.token;
+    console.log('je suis la')
+
+    if (!token) {
+        return res.status(401).json({ message: 'Token is missing' });
+    }
+
+    jwt.verify(token, process.env.JWT_SECRET, (err, data) => {
+        if (err) {
+            console.error('JWT verification error:', err);  // Log l'erreur pour la déboguer
+            return res.status(401).json({ message: 'Invalid or expired token' });
+        }
+        return res.status(200).json(data);
+    });
+};
