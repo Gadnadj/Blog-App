@@ -1,10 +1,21 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ImCross } from "react-icons/im";
+import { UserContext } from "../context/UserContext";
+import axios from "axios";
+import { URL } from "../url";
+import { useNavigate, useParams } from "react-router-dom";
+import { PostInterface } from "../types";
 
 
 const EditPost = () => {
     const [cat, setCat] = useState("");
     const [cats, setCats] = useState<string[]>([]);
+    const [title, setTitle] = useState("");
+    const [desc, setDesc] = useState("");
+    const [file, setFile] = useState<File | string | null>(null);
+    const PostId = useParams().id;
+    const { user } = useContext(UserContext);
+    const navigate = useNavigate();
 
     const addCategory = () => {
         setCats([...cats, cat]);
@@ -14,6 +25,65 @@ const EditPost = () => {
     const deleteCategory = (index: number) => {
         setCats(cats.filter((_, i) => i !== index));
     };
+
+    useEffect(() => {
+        const fetchPost = async () => {
+            try {
+                const res = await axios.get(URL + `/api/post/${PostId}`);
+                console.log(res.data);
+                setTitle(res.data.title);
+                setDesc(res.data.desc);
+                setFile(res.data.photo);
+                setCats(res.data.categories);
+            } catch (error) {
+            }
+        };
+
+        fetchPost();
+    }, [PostId]);
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (!user?.username || !user?._id) {
+            console.log("User not found, cannot create post");
+            return;
+        }
+
+        const newPost: PostInterface = {
+            title,
+            desc,
+            username: user.username,
+            user_id: user._id,
+            categories: cats,
+            photo: typeof file === "string" ? file : "",
+            updatedAt: new Date(Date.now())
+        };
+
+        if (file && typeof file !== "string") {
+            const data = new FormData();
+            const filename = Date.now() + file.name;
+            data.append("img", filename);
+            data.append("file", file);
+            newPost.photo = filename;
+
+            try {
+                const imageUpload = await axios.post(URL + "/api/upload", data, { withCredentials: true });
+                console.log(imageUpload.data);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        //post upload
+        try {
+            await axios.put(URL + "/api/post/" + PostId, newPost, { withCredentials: true });
+            navigate("/posts/post/" + PostId);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
 
     return (
         <div>
@@ -25,12 +95,26 @@ const EditPost = () => {
                 <form className="w-full flex flex-col gap-4 xl:gap-8 mt-4">
 
                     {/* add post title */}
-                    <input className="px-4 py-2 outline-none border-2 border-gray-300 rounded-lg" type="text" placeholder="Enter post title" />
+                    <input
+                        onChange={(e) => setTitle(e.target.value)}
+                        value={title}
+                        className="px-4 py-2 outline-none border-2 border-gray-300 rounded-lg"
+                        type="text"
+                        placeholder="Enter post title" />
 
                     {/* add image */}
                     <label className="border-2 border-dashed border-gray-400 rounded-lg p-4 text-center cursor-pointer hover:border-blue-500 transition">
-                        <span className="text-gray-500">Upload an image</span>
-                        <input type="file" className="hidden" />
+                        {file ? (
+                            <span className="text-gray-700">
+                                {typeof file === "string" ? file : file.name}
+                            </span>
+                        ) : (
+                            <span className="text-gray-500">Upload an image</span>
+                        )}
+                        <input
+                            onChange={(e) => e.target.files && setFile(e.target.files[0])}
+                            type="file"
+                            className="hidden" />
                     </label>
 
                     {/* add categories */}
@@ -65,13 +149,17 @@ const EditPost = () => {
                     </div>
 
                     <textarea
+                        onChange={(e) => setDesc(e.target.value)}
+                        value={desc}
                         rows={15}
                         cols={30}
                         className="px-4 py-2 outline-none border-2 border-gray-300 rounded-lg"
                         placeholder="Enter post description"
                     />
 
-                    <button className="bg-black text-white w-full rounded-lg xl:w-[40%] px-4 py-2 mx-auto text-lg xl:text-xl">
+                    <button
+                        onClick={(e) => handleSubmit(e)}
+                        className="bg-black text-white w-full rounded-lg xl:w-[40%] px-4 py-2 mx-auto text-lg xl:text-xl">
                         Update
                     </button>
 

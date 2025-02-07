@@ -1,4 +1,5 @@
 import Post from '../models/Post.js'
+import Comment from '../models/Comment.js'
 
 //Create a post
 export const createPost = async (req, res) => {
@@ -35,8 +36,8 @@ export const updatePost = async (req, res) => {
 
     try {
         const id = req.params.id
-        const post = await Post.findByIdAndUpdate(id, { $set: req.body }, { new: true })
-        return res.status(200).json(post)
+        const updatedPost = await Post.findByIdAndUpdate(id, { $set: req.body }, { new: true })
+        return res.status(200).json(updatedPost)
     } catch (error) {
         return res.status(500).json({ message: error.message })
 
@@ -48,6 +49,7 @@ export const deletePost = async (req, res) => {
     try {
         const id = req.params.id
         await Post.findByIdAndDelete(id)
+        await Comment.deleteMany({ post_id: req.params.id })
         return res.status(200).json({ message: 'Post has been deleted' })
     } catch (error) {
         return res.status(500).json({ message: error.message })

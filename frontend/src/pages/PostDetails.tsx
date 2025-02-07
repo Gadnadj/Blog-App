@@ -3,19 +3,18 @@ import { MdDelete } from "react-icons/md";
 import Comments from "../components/Comments";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { URL, IF } from "../url";
 import { PostInterface } from "../types";
 import { UserContext } from "../context/UserContext";
 import Loader from "../components/Loader";
-
-
 
 const PostDetails = () => {
     const [post, setPost] = useState<PostInterface>();
     const [loader, setLoader] = useState(false);
     const postId = useParams().id;
     const { user } = useContext(UserContext);
+    const navigate = useNavigate();
 
 
     useEffect(() => {
@@ -28,6 +27,16 @@ const PostDetails = () => {
 
         fetchPost();
     }, [postId]);
+
+    const handleDelete = async () => {
+        try {
+            await axios.delete(URL + `/api/post/${post?._id}`, { withCredentials: true });
+            navigate("/");
+
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     return (
         <div className="xl:px-[200px]">
@@ -50,8 +59,8 @@ const PostDetails = () => {
                                         user?._id === post?.user_id ?
                                             (
                                                 <div className="flex items-center justify-center gap-2">
-                                                    <p> <BiEdit size={25} className="cursor-pointer" /> </p>
-                                                    <p> <MdDelete size={25} className="cursor-pointer" /> </p>
+                                                    <p> <BiEdit onClick={() => navigate("/edit/" + postId)} size={25} className="cursor-pointer" /> </p>
+                                                    <p> <MdDelete onClick={handleDelete} size={25} className="cursor-pointer" /> </p>
                                                 </div>
                                             ) :
                                             ("")
