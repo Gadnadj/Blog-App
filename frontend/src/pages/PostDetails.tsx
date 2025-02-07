@@ -5,7 +5,7 @@ import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import { URL, IF } from "../url";
-import { PostInterface } from "../types";
+import { CommentInterface, PostInterface } from "../types";
 import { UserContext } from "../context/UserContext";
 import Loader from "../components/Loader";
 
@@ -15,7 +15,8 @@ const PostDetails = () => {
     const postId = useParams().id;
     const { user } = useContext(UserContext);
     const navigate = useNavigate();
-
+    const [comment, setComment] = useState("");
+    const [comments, setComments] = useState<CommentInterface[]>([]);
 
     useEffect(() => {
         setLoader(true);
@@ -28,10 +29,53 @@ const PostDetails = () => {
         fetchPost();
     }, [postId]);
 
+    useEffect(() => {
+        const fetchComment = async () => {
+            const res = await axios.get(URL + `/api/comment/post/${postId}`, { withCredentials: true });
+            console.log(res.data);
+            setComments(res.data);
+        };
+
+        fetchComment();
+    }, [postId]);
+
     const handleDelete = async () => {
         try {
             await axios.delete(URL + `/api/post/${post?._id}`, { withCredentials: true });
             navigate("/");
+
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const handleSubmit = async (comment: string) => {
+        setComment("");
+        try {
+            const res = await axios.post(URL + "/api/comment/write", { comment, author: user?.username, post_id: postId, user_id: user?._id }, { withCredentials: true });
+            console.log(res.data);
+            // Ajouter le commentaire directement dans le state local
+            setComments(prevComments => [
+                ...prevComments,
+                {
+                    _id: res.data._id,
+                    comment: res.data.comment,
+                    author: res.data.author,
+                    post_id: res.data.post_id,
+                    user_id: res.data.user_id,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                }
+            ]);
+        } catch (error) {
+
+        }
+    };
+
+    const handleCommentDelete = async (commentId: string) => {
+        try {
+            await axios.delete(URL + `/api/comment/${commentId}`, { withCredentials: true });
+            setComments(prevComments => prevComments.filter(comment => comment._id !== commentId));
 
         } catch (error) {
             console.log(error);
@@ -101,39 +145,29 @@ const PostDetails = () => {
                                     <h3 className="mt-6 mb-4 font-semibold">Comments:</h3>
 
                                     {/* comment */}
-                                    <div className="px-2 py-2 bg-gray-200 rounded-lg">
-                                        <div className="flex items-center justify-between">
-                                            <h3 className="font-bold text-gray-600">@snehasish</h3>
-                                            <div className="flex justify-center items-center gap-4">
-                                                <p className="text-gray-500 text-sm">16/06/2024</p>
-                                                <p className="text-gray-500 text-sm">16:45</p>
-
-                                                {
-                                                    post?.user_id === user?._id && (
-                                                        <div className="flex items-center justify-center gap-2">
-                                                            <p> <BiEdit className="cursor-pointer" /></p>
-                                                            <p> <MdDelete className="cursor-pointer" /></p>
-                                                        </div>
-                                                    )
-                                                }
-                                            </div>
-                                        </div>
-
-                                        <p className="mt-2">
-                                            Nice Information Dude
-                                        </p>
-                                    </div>
-
-                                    {/* comment */}
-                                    <Comments />
+                                    {
+                                        comments.map((item) => (
+                                            <Comments key={item._id} item={item} handleCommentDelete={handleCommentDelete} />
+                                        ))
+                                    }
                                 </div>
                             </div >
 
                             <div>
                                 {/* Write a comment */}
                                 <div className="w-full flex flex-col mt-4 xl:flex-row gap-3 px-8">
-                                    <textarea rows={3} cols={6} className="xl:w-[80%] outline-none px-4 mt-4 xl:mt-0 border rounded-lg py-2" placeholder="Write a comment" />
-                                    <button className="bg-black text-white px-4 py-2 xl:w-[20%] xl:mt-0 rounded-full">Add Comment</button>
+                                    <textarea
+                                        onChange={(e) => setComment(e.target.value)}
+                                        value={comment}
+                                        rows={3} cols={6}
+                                        className="xl:w-[80%] outline-none px-4 mt-4 xl:mt-0 border rounded-lg py-2"
+                                        placeholder="Write a comment" />
+
+                                    <button
+                                        onClick={() => handleSubmit(comment)}
+                                        className="bg-black text-white px-4 py-2 xl:w-[20%] xl:mt-0 rounded-full cursor-pointer">
+                                        Add Comment
+                                    </button>
                                 </div>
                             </div>
                         </>

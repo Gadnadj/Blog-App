@@ -16,6 +16,15 @@ export interface PostInterface {
     updatedAt: Date
 }
 
+export interface CommentInterface {
+    _id?: string,
+    comment: string,
+    author: string,
+    post_id: string,
+    user_id: string,
+    updatedAt: Date
+}
+
 export interface UserContextType {
     user: UserInterface | null;
     setUser: React.Dispatch<React.SetStateAction<UserInterface | null>>

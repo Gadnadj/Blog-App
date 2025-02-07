@@ -4,7 +4,6 @@ import Comment from '../models/Comment.js'
 //Create a post
 export const createPost = async (req, res) => {
     try {
-        console.log('received body', req.body)
         const { title, desc, photo, username, user_id, categories } = req.body
         if (!title) {
             return res.status(401).json({ message: 'Please provide a title' })
@@ -83,4 +82,15 @@ export const getUserPost = async (req, res) => {
 
     }
 }
+
+//Get user posts
+export const getUserPosts = async (req, res) => {
+    try {
+        const user_id = req.params.userId;
+        const posts = await Post.find({ user_id }).sort({ updatedAt: -1 });
+        return res.status(200).json(posts);
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
 

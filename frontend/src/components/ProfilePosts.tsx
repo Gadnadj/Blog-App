@@ -1,27 +1,36 @@
-import image1 from "../assets/image1.jpg";
+import { useNavigate } from "react-router-dom";
+import { PostInterface } from "../types";
+import { IF } from "../url";
 
-const ProfilePosts = () => {
+type props = {
+    post: PostInterface
+}
+
+
+const ProfilePosts = ({ post }: props) => {
+
+    const navigate = useNavigate();
     return (
-        <div className="w-full flex-col xl:flex xl:flex-row mt-8 space-x-2">
+        <div onClick={() => { navigate(`/posts/post/${post._id}`); }} className="cursor-pointer w-full flex-col xl:flex xl:flex-row mt-8 space-x-2">
             {/* left */}
-            <div className="w[35%] h-[200px] flex justify-center items-center">
-                <img src={image1} className="h-full w-full object-cover" />
+            <div className="w-[35%] h-[200px] flex justify-center items-center">
+                <img src={IF + post.photo} className="h-full w-full object-cover" />
             </div>
 
             {/* right */}
             <div className="flex flex-col w-[92%] xl:w-[65%]">
                 <h1 className="text-xl font-bold mb-1 xl:mb-2 xl:text-2xl">
-                    10 Uses of Artificial Intelligence in Day to Day Life
+                    {post.title}
                 </h1>
                 <div className="flex mb-2 text-sm font-semibold text-gray-500 items-center justify-between xl:mb-4">
-                    <p>@snehasishdev</p>
+                    <p>@{post.username}</p>
                     <div className="flex space-x-2">
-                        <p>16/06/2024</p>
-                        <p>16:45</p>
+                        <p className="text-gray-500 text-sm">{new Date(post.updatedAt).toString().slice(4, 15)}</p>
+                        <p className="text-gray-500 text-sm">{new Date(post.updatedAt).toString().slice(15, 24)}</p>
                     </div>
                 </div>
 
-                <p className="text-sm xl:text-lg">Prominent examples of AI software used in everyday life include voice assistants, images rendering... Prominent examples of AI software used in everyday life include voice assistants, images rendering... Prominent examples of AI software used in everyday life include voice assistants, images rendering...</p>
+                <p className="text-sm xl:text-lg">{post.desc}</p>
             </div>
         </div>
     );

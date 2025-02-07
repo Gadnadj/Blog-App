@@ -14,6 +14,8 @@ const Home = () => {
     const [loader, setLoader] = useState(false);
     const { user } = useContext(UserContext);
 
+    console.log(user);
+
     useEffect(() => {
         setLoader(true);
         const fetchPosts = async () => {

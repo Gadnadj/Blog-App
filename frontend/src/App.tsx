@@ -23,8 +23,8 @@ function App() {
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
             <Route path='/write' element={<CreatePost />} />
-            <Route path='/edit/:id' element={<EditPost />} />
             <Route path='/profile/:id' element={<Profile />} />
+            <Route path='/edit/:id' element={<EditPost />} />
             <Route path='/posts/post/:id' element={<PostDetails />} />
           </Routes>
           <Footer />
