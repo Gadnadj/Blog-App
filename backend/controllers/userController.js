@@ -77,7 +77,6 @@ export const logoutUser = async (req, res) => {
 
 //Update User
 export const updateUser = async (req, res) => {
-
     try {
         if (req.body.password) {
             const { password } = req.body
@@ -88,12 +87,22 @@ export const updateUser = async (req, res) => {
         const id = req.params.id
         const user = await User.findByIdAndUpdate(id, { $set: req.body }, { new: true })
         const { password: userPassword, ...info } = user._doc
-        return res.status(200).json(info)
 
+        // Générer un nouveau token avec les informations mises à jour
+        const token = jwt.sign(
+            { _id: user._id, username: user.username, email: user.email },
+            process.env.JWT_SECRET,
+            { expiresIn: '3d' }
+        )
+
+        // Renvoyer le nouveau token dans le cookie et les infos utilisateur
+        return res
+            .cookie('token', token, { httpOnly: true, secure: true })
+            .status(200)
+            .json(info)
 
     } catch (error) {
         return res.status(500).json({ message: error.message })
-
     }
 }
 

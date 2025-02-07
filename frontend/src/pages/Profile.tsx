@@ -6,9 +6,20 @@ import { URL } from "../url";
 import { PostInterface } from "../types";
 
 const Profile = () => {
-    const { user } = useContext(UserContext);
+    const { user, setUser } = useContext(UserContext);
     const [posts, setPosts] = useState<PostInterface[]>([]);
     const [loading, setLoading] = useState(true);
+    const [username, setUsername] = useState(user?.username || "");
+    const [email, setEmail] = useState(user?.email || "");
+    const [password, setPassword] = useState("");
+    const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
+
+    useEffect(() => {
+        if (user) {
+            setUsername(user.username);
+            setEmail(user.email);
+        }
+    }, [user]);
 
     useEffect(() => {
         if (user?._id) {
@@ -25,6 +36,26 @@ const Profile = () => {
             fetchUserPosts();
         }
     }, [user]);
+
+    const handleSubmit = async () => {
+        try {
+            const updateData = {
+                username,
+                email,
+                ...(password && { password })
+            };
+            
+            const res = await axios.put(URL + `/api/user/${user?._id}`, updateData, { withCredentials: true });
+            setUser(res.data);
+            setPassword("");
+            setMessage({ type: 'success', text: 'Profile updated successfully!' });
+            setTimeout(() => setMessage(null), 3000);
+        } catch (error) {
+            console.log(error);
+            setMessage({ type: 'error', text: 'Error updating profile' });
+            setTimeout(() => setMessage(null), 3000);
+        }
+    };
 
     return (
         <div>
@@ -49,23 +80,37 @@ const Profile = () => {
                         Profile
                     </h1>
                     <input
-                        className="outline-none px-4 py-2 border-2 rounded-lg text-gray-500 border-gray-300"
+                        className="outline-none px-4 py-2 border-2 rounded-lg text-black border-gray-300"
                         type="text"
-                        placeholder="Your username"
-                        value={user?.username || ""}
-                        readOnly
+                        placeholder="Username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
                     />
                     <input
-                        className="outline-none px-4 py-2 border-2 rounded-lg text-gray-500 border-gray-300"
+                        className="outline-none px-4 py-2 border-2 rounded-lg text-black border-gray-300"
                         type="email"
-                        placeholder="Your email"
-                        value={user?.email || ""}
-                        readOnly
+                        placeholder="Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                    <input
+                        className="outline-none px-4 py-2 border-2 rounded-lg text-black border-gray-300"
+                        type="password"
+                        placeholder="New password (optional)"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                     />
                     <div className="flex gap-4 items-center max-xl:justify-center">
-                        <button className="bg-black text-white px-6 py-2 rounded-full hover:bg-gray-500 hover:scale-105 hover:duration-200">Update</button>
+                        <button
+                            onClick={handleSubmit}
+                            className="bg-black text-white px-6 py-2 rounded-full hover:bg-gray-500 hover:scale-105 hover:duration-200">Update</button>
                         <button className="bg-black text-white px-6 py-2 rounded-full hover:bg-gray-500 hover:scale-105 hover:duration-200">Delete</button>
                     </div>
+                    {message && (
+                        <div className={`mt-4 p-2 rounded-lg text-center ${message.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                            {message.text}
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
