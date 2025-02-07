@@ -4,6 +4,7 @@ import { UserContext } from "../context/UserContext";
 import axios from "axios";
 import { URL } from "../url";
 import { PostInterface } from "../types";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
     const { user, setUser } = useContext(UserContext);
@@ -12,7 +13,8 @@ const Profile = () => {
     const [username, setUsername] = useState(user?.username || "");
     const [email, setEmail] = useState(user?.email || "");
     const [password, setPassword] = useState("");
-    const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
+    const [message, setMessage] = useState<{ type: "success" | "error", text: string } | null>(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (user) {
@@ -44,15 +46,31 @@ const Profile = () => {
                 email,
                 ...(password && { password })
             };
-            
+
             const res = await axios.put(URL + `/api/user/${user?._id}`, updateData, { withCredentials: true });
             setUser(res.data);
             setPassword("");
-            setMessage({ type: 'success', text: 'Profile updated successfully!' });
+            setMessage({ type: "success", text: "Profile updated successfully!" });
             setTimeout(() => setMessage(null), 3000);
         } catch (error) {
             console.log(error);
-            setMessage({ type: 'error', text: 'Error updating profile' });
+            setMessage({ type: "error", text: "Error updating profile" });
+            setTimeout(() => setMessage(null), 3000);
+        }
+    };
+
+    const handleDelete = async () => {
+        try {
+            if (window.confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
+                await axios.delete(URL + `/api/user/${user?._id}`, { withCredentials: true });
+                // Déconnexion après suppression
+                await axios.get(URL + "/api/user/logout", { withCredentials: true });
+                setUser(null);
+                navigate("/login");
+            }
+        } catch (error) {
+            console.log(error);
+            setMessage({ type: "error", text: "Error deleting account" });
             setTimeout(() => setMessage(null), 3000);
         }
     };
@@ -103,11 +121,17 @@ const Profile = () => {
                     <div className="flex gap-4 items-center max-xl:justify-center">
                         <button
                             onClick={handleSubmit}
-                            className="bg-black text-white px-6 py-2 rounded-full hover:bg-gray-500 hover:scale-105 hover:duration-200">Update</button>
-                        <button className="bg-black text-white px-6 py-2 rounded-full hover:bg-gray-500 hover:scale-105 hover:duration-200">Delete</button>
+                            className="bg-black text-white px-6 py-2 rounded-full hover:bg-gray-500 hover:scale-105 hover:duration-200">
+                            Update
+                        </button>
+                        <button 
+                            onClick={handleDelete}
+                            className="bg-red-500 text-white px-6 py-2 rounded-full hover:bg-red-600 hover:scale-105 hover:duration-200">
+                            Delete
+                        </button>
                     </div>
                     {message && (
-                        <div className={`mt-4 p-2 rounded-lg text-center ${message.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                        <div className={`mt-4 p-2 rounded-lg text-center ${message.type === "success" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
                             {message.text}
                         </div>
                     )}

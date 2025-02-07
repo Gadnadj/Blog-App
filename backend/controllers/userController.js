@@ -86,6 +86,19 @@ export const updateUser = async (req, res) => {
         }
         const id = req.params.id
         const user = await User.findByIdAndUpdate(id, { $set: req.body }, { new: true })
+        
+        // Si le username a changé, mettre à jour tous les posts et commentaires
+        if (req.body.username) {
+            await Post.updateMany(
+                { user_id: id },
+                { $set: { username: req.body.username } }
+            )
+            await Comment.updateMany(
+                { user_id: id },
+                { $set: { author: req.body.username } }
+            )
+        }
+
         const { password: userPassword, ...info } = user._doc
 
         // Générer un nouveau token avec les informations mises à jour
