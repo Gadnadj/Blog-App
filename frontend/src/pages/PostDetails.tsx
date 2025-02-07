@@ -99,10 +99,14 @@ const PostDetails = () => {
                                                 <p className="text-gray-500 text-sm">16/06/2024</p>
                                                 <p className="text-gray-500 text-sm">16:45</p>
 
-                                                <div className="flex items-center justify-center gap-2">
-                                                    <p> <BiEdit className="cursor-pointer" /></p>
-                                                    <p> <MdDelete className="cursor-pointer" /></p>
-                                                </div>
+                                                {
+                                                    post?.user_id === user?._id && (
+                                                        <div className="flex items-center justify-center gap-2">
+                                                            <p> <BiEdit className="cursor-pointer" /></p>
+                                                            <p> <MdDelete className="cursor-pointer" /></p>
+                                                        </div>
+                                                    )
+                                                }
                                             </div>
                                         </div>
 
