@@ -4,7 +4,7 @@ import Comments from "../components/Comments";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { URL } from "../url";
+import { URL, IF } from "../url";
 import { PostInterface } from "../types";
 import { UserContext } from "../context/UserContext";
 import Loader from "../components/Loader";
@@ -68,7 +68,7 @@ const PostDetails = () => {
                                     </div>
                                 </div>
 
-                                <img className="w-full xl:w-[80%] xl:h-[600px] mx-auto mt-8 object-cover" src={post?.photo} alt="" />
+                                <img className="w-full xl:w-[80%] xl:h-[600px] mx-auto mt-8 object-cover" src={IF + post?.photo} alt="" />
 
                                 <p className="text-sm xl:text-lg mt-8">
                                     {post?.desc}

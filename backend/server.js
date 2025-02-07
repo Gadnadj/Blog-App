@@ -7,6 +7,11 @@ import postRouter from './routes/posts.route.js'
 import commentRouter from './routes/comments.route.js'
 import cors from 'cors'
 import multer from 'multer'
+import path from 'path'
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 
 
@@ -16,6 +21,7 @@ const app = express()
 
 //middleware
 app.use(express.json())
+app.use('/images', express.static(path.join(__dirname, '/images')))
 app.use(cookieParser())
 app.use(cors({ origin: "http://localhost:5173", credentials: true }))
 app.use('/api/user', userRouter)

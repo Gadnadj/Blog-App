@@ -29,10 +29,6 @@ const CreatePost = () => {
     const handleCreate = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        console.log("User:", user);  // Vérifie si l'utilisateur est bien défini
-        console.log("Cookies:", document.cookie);  // Vérifie si le token est bien stocké
-
-
         if (!user?.username || !user?._id) {
             console.log("User not found, cannot create post");
             return;
@@ -58,7 +54,6 @@ const CreatePost = () => {
             try {
                 const imageUpload = await axios.post(URL + "/api/upload", data, { withCredentials: true });
                 console.log(imageUpload.data);
-                navigate("/");
             } catch (error) {
                 console.log(error);
             }
@@ -67,7 +62,7 @@ const CreatePost = () => {
         //post upload
         try {
             const res = await axios.post(URL + "/api/post/write", newPost, { withCredentials: true });
-            console.log(res.data);
+            navigate("/posts/post/" + res.data._id);
         } catch (error) {
             console.log(error);
         }
@@ -93,7 +88,11 @@ const CreatePost = () => {
 
                     {/* add image */}
                     <label className="border-2 border-dashed border-gray-400 rounded-lg p-4 text-center cursor-pointer hover:border-blue-500 transition">
-                        <span className="text-gray-500">Upload an image</span>
+                        {file ? (
+                            <span className="text-gray-700">{file.name}</span>
+                        ) : (
+                            <span className="text-gray-500">Upload an image</span>
+                        )}
                         <input
                             onChange={(e) => e.target.files && setFile(e.target.files[0])}
                             type="file"

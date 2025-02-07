@@ -1,4 +1,5 @@
 import { PostInterface } from "../types";
+import { IF } from "../url";
 
 type props = {
     post: PostInterface
@@ -9,7 +10,7 @@ const HomePosts = ({ post }: props) => {
         <div className="w-full flex-col xl:flex xl:flex-row mt-8 space-x-2">
             {/* left */}
             <div className="w-[100%] xl:w-[25%] h-[250px] flex justify-center items-center">
-                <img src={post.photo} className="h-full w-full object-cover" />
+                <img src={IF + post.photo} className="h-full w-full object-cover" />
             </div>
 
             {/* right */}
