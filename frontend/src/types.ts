@@ -6,12 +6,12 @@ export interface UserInterface {
 }
 
 export interface PostInterface {
-    _id: string,
+    _id?: string,
     title: string,
     desc: string,
     photo: string,
     username: string,
-    user_id: string
+    user_id: string;
     categories: Array<string>,
     updatedAt: Date
 }

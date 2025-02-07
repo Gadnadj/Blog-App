@@ -3,6 +3,7 @@ import Post from '../models/Post.js'
 //Create a post
 export const createPost = async (req, res) => {
     try {
+        console.log('received body', req.body)
         const { title, desc, photo, username, user_id, categories } = req.body
         if (!title) {
             return res.status(401).json({ message: 'Please provide a title' })
@@ -10,12 +11,19 @@ export const createPost = async (req, res) => {
         else if (!desc) {
             return res.status(401).json({ message: 'Please provide a description' })
         }
+        if (!username) {
+            return res.status(400).json({ message: 'Please provide a username' });
+        }
+        if (!user_id) {
+            return res.status(400).json({ message: 'Please provide a user_id' });
+        }
 
         const post = new Post({ title, desc, photo, username, user_id, categories })
         const savedPost = await post.save()
         return res.status(200).json(savedPost)
 
     } catch (error) {
+        console.error('Error creating post:', error);
         return res.status(500).json({ message: error.message })
 
     }
